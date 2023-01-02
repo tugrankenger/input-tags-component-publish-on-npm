@@ -1,11 +1,6 @@
 <template>
-<div class="tag-container">
-    <Tag 
-    v-for="(tag,index) in tags" 
-    :tag = "tag"
-    :index = "index"
-    @removeTagEvent = "deleteItem($event)"
-    />
+  <div class="tag-container">
+    <Tag v-for="(tag, index) in tags" :tag="tag" :index="index" :changeColor="color" @removeTagEvent="deleteItem($event)" />
     <input autofocus placeholder="Add item..." type="text" @keydown.enter="addTag" @keydown.backspace="removeTag">
     <p class="error" v-if="error">{{ duplicateTag }} is already exists</p>
   </div>
@@ -13,18 +8,18 @@
 
 <script>
 import Tag from './Tag.vue'
-  export default{
-    components:{
-      Tag
-    },
-    data() {
+export default {
+  components: {
+    Tag
+  },
+  data() {
     return {
-      tags: ["Vuejs", "React", "Angular", "Nodejs", "Rust", "Assembly", ".Net"],
+      tags: [],
       error: false,
       duplicateTag: ""
     }
   },
-  methods:{
+  methods: {
     addTag(event) {
       let inputText = event.target
       let matchedTag = false
@@ -45,9 +40,6 @@ import Tag from './Tag.vue'
           }, 2000)
         }
       }
-      if (event.keyCode === 8) {
-        console.log("backspace")
-      }
     },
     removeTag(event) {
       if (event.target.value.length <= 0) {
@@ -59,12 +51,35 @@ import Tag from './Tag.vue'
       // let index = this.tags.indexOf(itemIndex)
       this.tags.splice(itemIndex, 1)
     }
+  },
+  props: {
+    modelValue:{
+      required: false
+    },
+    color:{
+      type : String,
+      required: false,
+      default: "primary"
+    }
+  },
+  created() {
+    if (this.modelValue) {
+      if (this.modelValue.length > 0) {
+        this.tags = this.modelValue.split(',')
+      }
+    }
+  },
+  watch:{
+    tags(newVal){
+      this.$emit("update:modelValue", newVal)
+    }
   }
-  }
+}
 </script>
 
 <style scoped>
 .tag-container {
+  margin: 20px 0;
   border: 1px solid #333;
   padding: 20px;
 }

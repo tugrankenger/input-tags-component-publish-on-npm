@@ -1,5 +1,5 @@
 <template>
-  <span class="tag">
+  <span class="tag" :class="currentColor">
       <span class="content">{{ tag }} </span>
       <span class="close" @click="$emit('removeTagEvent',index)"> X</span>
     </span>
@@ -7,16 +7,24 @@
 
 <script>
   export default{
-    props:["tag","index"]
+    props:["tag","index", "changeColor"],
+
+    data(){
+      return{
+        currentColor: null
+      }
+    },
+    mounted(){
+      this.currentColor = this.changeColor
+    }
   }
 </script>
 
 <style scoped>
   .tag {
-  background-color: #ffc822;
   padding: 10px;
-  color: #000;
   font-size: 14px;
+  position:relative
 }
 
 .tag:not(:last-child) {
@@ -24,9 +32,21 @@
 }
 
 .tag .close {
-  font-size: 12px;
+  font-size: 10px;
   cursor: pointer;
   font-weight: 700;
+  position: absolute;
+  top: 0;
+}
+
+.success{
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.primary{
+  background-color: #cce5ff;
+  color: #004085;
 }
 
 </style>

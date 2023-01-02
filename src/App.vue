@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <app-tags></app-tags>
+    <app-tags v-model="tags" color="success"/>
+    {{tags.toString().replaceAll(',',', ')}}
+    <app-tags v-model="tags2" color="primary"/>
+    {{tags2.toString().replaceAll(',',', ')}} 
   </div>
 </template>
 
@@ -10,8 +13,11 @@ export default {
   components:{
     appTags: Tags
   },
-  methods: {
-    
+  data(){
+    return{
+      tags:"Vuejs,React,Angular,Nodejs,Rust,Assembly",
+      tags2 :"Python,Java,.Net"
+    }
   }
 }
 </script>
